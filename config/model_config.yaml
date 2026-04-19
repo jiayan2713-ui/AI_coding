@@ -1,0 +1,65 @@
+deepseek:
+  api_key: "${DEEPSEEK_API_KEY}"
+  base_url: "https://api.deepseek.com"
+  timeout: 30
+  max_retries: 3
+
+# 本地模型配置
+local_models:
+  embedding:
+    name: "BAAI/bge-small-zh-v1.5"
+    device: "cpu"
+    batch_size: 32
+    cache_dir: "./data/model_cache"
+    normalize_embeddings: true
+
+models:
+  chat:
+    name: "deepseek-chat"
+    temperature: 0.1
+    max_tokens: 2000
+    top_p: 0.9
+
+  embedding:
+    type: "local"  # local 或 deepseek
+    local_model: "BAAI/bge-small-zh-v1.5"
+    deepseek_model: "deepseek-embedding"
+    dimensions: 384  # 本地模型维度
+    batch_size: 32
+
+prompts:
+  system: |
+    你是一个专业的文档问答助手。请根据提供的文档内容回答问题。
+    要求：
+    1. 只基于提供的文档内容回答，不要添加文档中没有的信息
+    2. 如果文档内容不完整或不清楚，请说明
+    3. 回答要简洁、准确、专业
+    4. 如果问题涉及多个方面，请分点回答
+    5. 引用相关的文档片段
+
+  scope_check: |
+    请判断以下问题是否可以根据提供的文档内容回答。
+
+    问题: {question}
+
+    相关文档内容:
+    {context}
+
+    请严格按照以下格式回答:
+    1. 如果问题可以根据文档内容回答，回答: IN_SCOPE
+    2. 如果问题无法根据文档内容回答，回答: OUT_OF_SCOPE
+    3. 给出置信度分数(0.0-1.0): CONFIDENCE: [分数]
+
+    只输出上述格式的内容，不要添加其他解释。
+
+  out_of_scope: |
+    用户提出了以下问题，但该问题不在已上传文档的范围内:
+    问题: {question}
+
+    请以友好、专业的方式告诉用户，这个问题无法基于当前文档回答。
+    建议用户可以:
+    1. 上传相关文档
+    2. 重新提问与文档相关的问题
+    3. 联系管理员获取帮助
+
+    请用中文回复，语气要友好、有帮助。

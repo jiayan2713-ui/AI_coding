@@ -1,0 +1,12 @@
+{
+  "conversation_id": "conv_1775564894_e575a4",
+  "vector_store_documents": 3,
+  "components_initialized": [
+    "MockDeepSeekClient",
+    "MockDocumentProcessor",
+    "MockVectorStore",
+    "MockConversationManager"
+  ],
+  "demo_status": "completed",
+  "timestamp": 1775564894.9869125
+}

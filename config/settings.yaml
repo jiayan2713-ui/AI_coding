@@ -1,0 +1,52 @@
+app:
+  name: "RAG智能文档问答系统"
+  version: "1.0.0"
+  description: "基于DeepSeek的RAG文档问答系统"
+
+server:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 4
+  reload: true
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "data/logs/app.log"
+
+database:
+  chromadb:
+    persist_directory: "data/chroma_db"
+    collection_name: "document_embeddings"
+    distance_metric: "cosine"
+
+document_processing:
+  max_file_size_mb: 50
+  chunk_size: 1000
+  chunk_overlap: 200
+  supported_formats:
+    - pdf
+    - docx
+    - xlsx
+    - txt
+    - md
+    - json
+    - csv
+    - jpg
+    - jpeg
+    - png
+
+retrieval:
+  similarity_threshold: 0.45
+  max_results: 5
+  rerank_enabled: false
+
+conversation:
+  max_history: 10
+  ttl_hours: 1
+
+security:
+  cors_origins:
+    - "http://localhost:8501"
+    - "http://127.0.0.1:8501"
+  rate_limit_enabled: false
